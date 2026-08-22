@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-aggregator-service
+
+system-service:
+  base-url: ${SYSTEM_SERVICE_BASE_URL:http://localhost:8081}
+  api-key: ${INTERNAL_API_KEY:local-dev-internal-key}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+
+logging:
+  level:
+    com.technovisions.orderaggregator: INFO
