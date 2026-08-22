@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Management — Test Console</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Customer Order Management</h1>
+  <div class="base-url-row">
+    <label for="baseUrl">Aggregator base URL</label>
+    <input id="baseUrl" type="text" value="http://localhost:8080">
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Create Customer</h2>
+    <form id="createCustomerForm">
+      <label>Full name <input name="fullName" placeholder="Jane Doe" required></label>
+      <label>Email <input name="email" type="email" placeholder="jane@example.com" required></label>
+      <label>Phone <input name="phone" placeholder="+1234567890" required></label>
+      <button type="submit">Create customer</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Create Order</h2>
+    <form id="createOrderForm">
+      <label>Customer ID <input name="customerId" type="number" min="1" required></label>
+      <label>Product name <input name="productName" placeholder="Widget" required></label>
+      <label>Quantity <input name="quantity" type="number" min="1" value="1" required></label>
+      <label>Price <input name="price" type="number" min="0" step="0.01" value="0.00" required></label>
+      <button type="submit">Create order</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Get Customer Orders</h2>
+    <form id="getOrdersForm">
+      <label>Customer ID <input name="customerId" type="number" min="1" required></label>
+      <button type="submit">Fetch orders</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Update Order Status</h2>
+    <form id="updateStatusForm">
+      <label>Order ID <input name="orderId" type="number" min="1" required></label>
+      <label>New status
+        <select name="status">
+          <option value="CREATED">CREATED</option>
+          <option value="PREPARING">PREPARING</option>
+          <option value="FINISHED">FINISHED</option>
+        </select>
+      </label>
+      <button type="submit">Update status</button>
+    </form>
+  </section>
+</main>
+
+<section class="panel log-panel">
+  <div class="log-header">
+    <h2>Request / Response Log</h2>
+    <button id="clearLog" type="button">Clear</button>
+  </div>
+  <div id="log"></div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
