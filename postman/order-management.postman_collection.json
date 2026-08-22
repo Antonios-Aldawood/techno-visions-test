@@ -1,0 +1,184 @@
+{
+  "info": {
+    "name": "Customer Order Management",
+    "description": "Aggregator public API (/api/v1) and System internal API (/internal) for the Customer Order Management assessment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "aggregatorBaseUrl", "value": "http://localhost:8080" },
+    { "key": "systemBaseUrl", "value": "http://localhost:8081" },
+    { "key": "internalApiKey", "value": "local-dev-internal-key" },
+    { "key": "customerId", "value": "1" },
+    { "key": "orderId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Aggregator API (public)",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+1234567890\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Customer - invalid email (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"email\": \"not-an-email\",\n  \"phone\": \"+1234567890\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": {{customerId}},\n  \"productName\": \"Widget\",\n  \"quantity\": 2,\n  \"price\": 9.99\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Order - unknown customer (404)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 999999,\n  \"productName\": \"Widget\",\n  \"quantity\": 2,\n  \"price\": 9.99\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Order - invalid quantity (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": {{customerId}},\n  \"productName\": \"Widget\",\n  \"quantity\": 0,\n  \"price\": 9.99\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "url": "{{aggregatorBaseUrl}}/api/v1/customers/{{customerId}}/orders"
+          }
+        },
+        {
+          "name": "Get Customer Orders - unknown customer (404)",
+          "request": {
+            "method": "GET",
+            "url": "{{aggregatorBaseUrl}}/api/v1/customers/999999/orders"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/orders/{{orderId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PREPARING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Order Status - invalid status (400)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{aggregatorBaseUrl}}/api/v1/orders/{{orderId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SHIPPED\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "System API (internal, requires X-Internal-Api-Key)",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Internal-Api-Key", "value": "{{internalApiKey}}" }
+            ],
+            "url": "{{systemBaseUrl}}/internal/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+1234567890\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Internal-Api-Key", "value": "{{internalApiKey}}" }
+            ],
+            "url": "{{systemBaseUrl}}/internal/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": {{customerId}},\n  \"productName\": \"Widget\",\n  \"quantity\": 2,\n  \"price\": 9.99\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-Internal-Api-Key", "value": "{{internalApiKey}}" }],
+            "url": "{{systemBaseUrl}}/internal/customers/{{customerId}}/orders"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Internal-Api-Key", "value": "{{internalApiKey}}" }
+            ],
+            "url": "{{systemBaseUrl}}/internal/orders/{{orderId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PREPARING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "No API key (401)",
+          "request": {
+            "method": "GET",
+            "url": "{{systemBaseUrl}}/internal/customers/{{customerId}}/orders"
+          }
+        }
+      ]
+    }
+  ]
+}

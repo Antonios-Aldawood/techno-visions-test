@@ -1,0 +1,2 @@
+system-service:
+  base-url: http://order-system-service:8081
